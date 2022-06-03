@@ -59,32 +59,32 @@ import {ComposableMap,
 
 
      
-     const fetchData = async() =>{
-          console.log(content) // = Name
+     const fetchData = async(ISO_A2) =>{
+          console.log({content}) // = Name
           try { 
-          const response =await axios.get(`https://restcountries.com/v3.1/name/${content}`) 
+          const response =await axios.get(`https://restcountries.com/v3.1/alpha/${ISO_A2}`) 
           console.log("response:",response)
-          const details = response.data
+          const details = response.data[0]
           console.log("Data:", details)
-   // Need to set country data to content - but content when displayed = name only. 
+   
           setCountryData({
-               name: details?.name,
-               capital:details?.capital,
+               name: details?.name.common,
+               capital:details?.capital[0],
                subregion: details?.subregion,
                region: details?.region,
                population: details?.population,
                timezones: details?.timezones?.[0],
                flag: details?.flags?.svg,
-               currency: details?.currencies?.[0]?.name,
-               languages: details?.languages?.[0]?.name
+               currency: details?.currencies?.CDF?.name,
+               languages: details?.languages
                
           
           }) 
      }  catch (e){console.log(e)}
-     console.log(countryData)
+    
      } 
    
-     
+     console.log(countryData)
          return (
            <div className="App">
             <h1> Geo-Genius</h1>
@@ -108,11 +108,11 @@ import {ComposableMap,
        key = {geo.rsmKey}
        geography= {geo} onClick={()=> {
          
-         const {NAME} = geo.properties;
+         const {ISO_A2} = geo.properties;
+          console.log(geo)
+      
 
-         setContent(`${NAME}`);
-
-         fetchData()
+         fetchData(ISO_A2)
        }}
        onMouseEnter={()=>{
           const {NAME} = geo.properties;
